@@ -2,7 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' // new
+    hide EmailAuthProvider, PhoneAuthProvider;    // new
+import 'package:flutter/material.dart';           // new
+import 'package:provider/provider.dart';          // new
+
+import 'app_state.dart';                          // new
+import 'src/authentication.dart';                 // new
 
 import 'src/widgets.dart';
 
@@ -17,8 +23,29 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           Image.asset('assets/codelab.png'),
           const SizedBox(height: 8),
-          const IconAndDetail(Icons.calendar_today, 'October 30'),
-          const IconAndDetail(Icons.location_city, 'San Francisco'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
+            child: const IconAndDetail(Icons.calendar_today, 'October 30'),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
+            child: const IconAndDetail(Icons.location_city, 'San Francisco'),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
+            child: const IconAndDetail(Icons.account_tree, 'Pine Tree'),
+          ),
+
+          // Add from here
+          Consumer<ApplicationState>(
+            builder: (context, appState, _) => AuthFunc(
+                loggedIn: appState.loggedIn,
+                signOut: () {
+                  FirebaseAuth.instance.signOut();
+                }),
+          ),
+          // to here
+
           const Divider(
             height: 8,
             thickness: 1,
